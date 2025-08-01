@@ -1,7 +1,14 @@
+// app/layout.jsx
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const Layout = ({ children }) => {
-  return <div className="container mx-auto mt-5 px-4">{children}</div>;
-};
+export default async function Layout({ children }) {
+  const { orgId } = auth();
 
-export default Layout;
+  if (!orgId) {
+    redirect("/onboarding");
+  }
+
+  return <div className="container mx-auto mt-5 px-4">{children}</div>;
+}
