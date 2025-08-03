@@ -3,11 +3,11 @@ import { redirect } from "next/navigation";
 import { getOrganization } from "@/actions/organizations";
 import OrgSwitcher from "@/components/org-switcher";
 import ProjectList from "./_components/project-list";
-// import UserIssues from "./_components/user-issues";
+//import UserIssues from "./_components/user-issues";
 
 export default async function OrganizationPage({ params }) {
-  const { orgId } = params;
-  const { userId } = auth();
+  const { orgId } = await params;
+  const { userId } =   auth();
 
   if (!userId) {
     redirect("/sign-in");
@@ -23,7 +23,7 @@ export default async function OrganizationPage({ params }) {
     <div className="container mx-auto px-4">
       <div className="mb-4 flex flex-col sm:flex-row justify-between items-start">
         <h1 className="text-5xl font-bold gradient-title pb-2">
-          {organization.name}&rsquo;s Projects
+          {organization.name}&rsquo;s Projects {orgId}
         </h1>
 
         <OrgSwitcher />

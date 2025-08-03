@@ -3,21 +3,26 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useOrganization, useUser } from "@clerk/nextjs";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import OrgSwitcher from "@/components/org-switcher";
 import useFetch from "@/hooks/use-fetch";
 import { projectSchema } from "@/app/lib/validators";
 import { createProject } from "@/actions/projects";
 import { BarLoader } from "react-spinners";
-import OrgSwitcher from "@/components/org-switcher";
 
 export default function CreateProjectPage() {
   const router = useRouter();
+  const params = useParams();
+  const orgId = params?.orgId;
+
   const { isLoaded: isOrgLoaded, membership } = useOrganization();
   const { isLoaded: isUserLoaded } = useUser();
+
   const [isAdmin, setIsAdmin] = useState(false);
 
   const {
@@ -47,15 +52,22 @@ export default function CreateProjectPage() {
       return;
     }
 
-    createProjectFn(data);
+    if (!orgId) {
+      alert("Organization ID missing from URL.");
+      return;
+    }
+
+    createProjectFn({ ...data, orgId });
   };
 
   useEffect(() => {
-    if (project) router.push(`/project/${project.id}`);
-  }, [loading]);
+    if (project && project.id) {
+      router.push(`/project/${project.id}`);
+    }
+  }, [project, router]);
 
   if (!isOrgLoaded || !isUserLoaded) {
-    return null;
+    return null; // Wait until data is ready
   }
 
   if (!isAdmin) {
@@ -90,6 +102,7 @@ export default function CreateProjectPage() {
             <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
           )}
         </div>
+
         <div>
           <Input
             id="key"
@@ -101,6 +114,7 @@ export default function CreateProjectPage() {
             <p className="text-red-500 text-sm mt-1">{errors.key.message}</p>
           )}
         </div>
+
         <div>
           <Textarea
             id="description"
@@ -114,9 +128,9 @@ export default function CreateProjectPage() {
             </p>
           )}
         </div>
-        {loading && (
-          <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />
-        )}
+
+        {loading && <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />}
+
         <Button
           type="submit"
           size="lg"
@@ -125,6 +139,7 @@ export default function CreateProjectPage() {
         >
           {loading ? "Creating..." : "Create Project"}
         </Button>
+
         {error && <p className="text-red-500 mt-2">{error.message}</p>}
       </form>
     </div>

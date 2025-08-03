@@ -4,10 +4,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadesOfPurple } from "@clerk/themes";
-
 import "react-day-picker/style.css";
-
 import { Toaster } from "sonner";
+import { checkUser } from "@/lib/checkUser";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +15,8 @@ export const metadata = {
   description: "",
 };
 
-export default function RootLayout({ children }) {
+export  default   function RootLayout({ children }) {
+ 
   return (
     <ClerkProvider
       appearance={{
@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
       }}
     >
       <html lang="en">
-        <body className={`${inter.className}  `}>
+        <body className={`${inter.className} `}>
           <ThemeProvider attribute="class" defaultTheme="dark">
             <Header />
             <main className="min-h-screen">{children}</main>

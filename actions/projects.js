@@ -4,7 +4,9 @@ import { db } from "@/lib/prisma";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
 export async function createProject(data) {
-  const { userId, orgId } = auth();
+ const session = await auth(); // ✅ Correct way
+const { userId, orgId } = session;
+
 
   if (!userId) {
     throw new Error("Unauthorized");

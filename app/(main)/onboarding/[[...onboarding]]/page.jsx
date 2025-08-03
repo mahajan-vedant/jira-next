@@ -1,26 +1,39 @@
 "use client";
 
-import { OrganizationList, useOrganization } from "@clerk/nextjs";
+import { OrganizationList, useOrganizationList } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useState } from "react";
 
-export default function Onboarding() {
-  const { organization } = useOrganization();
+export default function OnboardingPage() {
+  const { setActive } = useOrganizationList();
   const router = useRouter();
+  const [redirecting, setRedirecting] = useState(false);
 
-  useEffect(() => {
-    if (organization) {
-      router.push(`/organization/${organization.slug}`);
+  const handleOrgAction = async (org) => {
+    if (!org?.id || redirecting) return;
+
+    setRedirecting(true);
+    try {
+      await setActive({ organization: org.id });
+
+      // ✅ WAIT a bit, THEN use full page reload to force Clerk context sync
+      setTimeout(() => {
+        window.location.href = `/organization/${org.slug}`;
+      }, 800); // not router.push - use full reload
+    } catch (error) {
+      console.error("Error setting active org:", error);
+      setRedirecting(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [organization]);
+  };
 
   return (
     <div className="flex justify-center items-center pt-14">
       <OrganizationList
         hidePersonal
-        afterCreateOrganizationUrl="/organization/:slug"
-        afterSelectOrganizationUrl="/organization/:slug"
+        afterCreateOrganizationUrl={null}
+        afterSelectOrganizationUrl={null}
+        onCreateOrganization={handleOrgAction}
+        onSelectOrganization={handleOrgAction}
       />
     </div>
   );
