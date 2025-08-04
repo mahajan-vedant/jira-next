@@ -50,7 +50,7 @@ export default function Home() {
         <h1 className="text-6xl sm:text-7xl lg:text-8xl font-extrabold gradient-title pb-6 flex flex-col">
           Streamline Your Workflow <br />
           <span className="flex mx-auto gap-3 sm:gap-4 items-center">
-            with
+            with xyz
             {/* <Image
               src={"/logo2.png"}
               alt="Zscrum Logo"
@@ -121,7 +121,7 @@ export default function Home() {
             Ready to Transform Your Workflow?
           </h3>
           <p className="text-xl mb-12">
-            Join thousands of teams already using ZCRUM to streamline their
+            Join thousands of teams already using xyz to streamline their
             projects and boost productivity.
           </p>
           <Link href="/onboarding">
