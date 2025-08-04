@@ -1,27 +1,60 @@
 "use client";
 
 import { OrganizationList, useOrganizationList } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function OnboardingPage() {
-  const { setActive } = useOrganizationList();
-  const router = useRouter();
+  const { organizationList, isLoaded, setActive } = useOrganizationList();
   const [redirecting, setRedirecting] = useState(false);
+  const router = useRouter();
 
-  const handleOrgAction = async (org) => {
-    if (!org?.id || redirecting) return;
+  useEffect(() => {
+    if (!isLoaded) return;
 
-    setRedirecting(true);
+    if (organizationList && organizationList.length > 0) {
+      console.log("➡ Full orgList raw:", organizationList);
+organizationList.forEach((orgItem, index) => {
+  const org = orgItem?.organization;
+  if (org) {
+    console.log(`Org ${index + 1}:`, {
+      id: org.id,
+      name: org.name,
+      slug: org.slug,
+    });
+  } else {
+    console.warn("❌ No organization in item:", orgItem);
+  }
+});
+
+    
+    }
+  }, [isLoaded, organizationList]);
+
+  const handleOrgAction = async (orgLike) => {
     try {
-      await setActive({ organization: org.id });
+      if (!orgLike || redirecting || !setActive) {
+        console.warn("⚠️ Cannot set active org yet.");
+        return;
+      }
 
-      // ✅ WAIT a bit, THEN use full page reload to force Clerk context sync
-      setTimeout(() => {
-        window.location.href = `/organization/${org.slug}`;
-      }, 800); // not router.push - use full reload
+      const orgId = orgLike?.id ?? orgLike?.organization?.id;
+      const orgSlug = orgLike?.slug ?? orgLike?.organization?.slug;
+
+      if (!orgId || !orgSlug) {
+        console.warn("⚠️ Invalid organization object", orgLike);
+        return;
+      }
+
+      setRedirecting(true);
+
+      console.log("👉 Setting active organization:", orgId);
+      await setActive({ organization: orgId });
+
+      console.log("✅ Organization set active. Redirecting to:", `/organization/${orgSlug}`);
+      router.push(`/organization/${orgSlug}`);
     } catch (error) {
-      console.error("Error setting active org:", error);
+      console.error("❌ Error setting active org:", error);
       setRedirecting(false);
     }
   };

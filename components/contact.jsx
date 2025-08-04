@@ -45,9 +45,9 @@ const Contact = () => {
     <section id="contact" className="flex-center ">
       <div className="w-full h-full md:px-10 px-5">
            <div className="flex flex-col items-center gap-5">
-        <div className="hero-badge">
+        {/* <div className="hero-badge">
           <p>💬 Have questions or ideas? Let’s talk! 🚀</p>
-        </div>
+        </div> */}
         <div>
           <h1 className="font-semibold md:text-5xl text-3xl text-center">
             Get in Touch – Let’s Connect
@@ -117,7 +117,7 @@ const Contact = () => {
           </div>
           <div className="xl:col-span-7 min-h-96">
             <div className="bg-[#cd7c2e] w-full h-full hover:cursor-grab rounded-3xl overflow-hidden">
-              {/* <ContactExperience /> */}
+              <ContactExperience />
             </div>
           </div>
         </div>

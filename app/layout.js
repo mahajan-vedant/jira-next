@@ -1,12 +1,12 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "@/components/header";
+import Header from "@/components/header-server";
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadesOfPurple } from "@clerk/themes";
 import "react-day-picker/style.css";
 import { Toaster } from "sonner";
-import { checkUser } from "@/lib/checkUser";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,7 +43,7 @@ export  default   function RootLayout({ children }) {
             <Toaster richColors />
             <footer className="bg-gray-900 py-12">
               <div className="container mx-auto px-4 text-center text-gray-200">
-                <p>Made with 💗 by Vedant</p>
+                <p>Made with ❤️ by Vedant</p>
               </div>
             </footer>
           </ThemeProvider>

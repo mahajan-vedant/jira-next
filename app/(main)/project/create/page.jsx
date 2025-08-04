@@ -1,147 +1,16 @@
-"use client";
+import { auth } from "@clerk/nextjs/server";
+import CreateProjectClient from "../components/client";
 
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter, useParams } from "next/navigation";
-import { useOrganization, useUser } from "@clerk/nextjs";
+export default async function CreateProjectPage() {
+  const { orgId, userId } = auth();
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import OrgSwitcher from "@/components/org-switcher";
-import useFetch from "@/hooks/use-fetch";
-import { projectSchema } from "@/app/lib/validators";
-import { createProject } from "@/actions/projects";
-import { BarLoader } from "react-spinners";
-
-export default function CreateProjectPage() {
-  const router = useRouter();
-  const params = useParams();
-  const orgId = params?.orgId;
-
-  const { isLoaded: isOrgLoaded, membership } = useOrganization();
-  const { isLoaded: isUserLoaded } = useUser();
-
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(projectSchema),
-  });
-
-  useEffect(() => {
-    if (isOrgLoaded && isUserLoaded && membership) {
-      setIsAdmin(membership.role === "org:admin");
-    }
-  }, [isOrgLoaded, isUserLoaded, membership]);
-
-  const {
-    loading,
-    error,
-    data: project,
-    fn: createProjectFn,
-  } = useFetch(createProject);
-
-  const onSubmit = async (data) => {
-    if (!isAdmin) {
-      alert("Only organization admins can create projects");
-      return;
-    }
-
-    if (!orgId) {
-      alert("Organization ID missing from URL.");
-      return;
-    }
-
-    createProjectFn({ ...data, orgId });
-  };
-
-  useEffect(() => {
-    if (project && project.id) {
-      router.push(`/project/${project.id}`);
-    }
-  }, [project, router]);
-
-  if (!isOrgLoaded || !isUserLoaded) {
-    return null; // Wait until data is ready
+  if (!userId) {
+    return <div className="text-center mt-20 text-xl">Please sign in.</div>;
   }
 
-  if (!isAdmin) {
-    return (
-      <div className="flex flex-col gap-2 items-center">
-        <span className="text-2xl gradient-title">
-          Oops! Only Admins can create projects.
-        </span>
-        <OrgSwitcher />
-      </div>
-    );
+  if (!orgId) {
+    return <div className="text-center mt-20 text-xl">No organization selected.</div>;
   }
 
-  return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-6xl text-center font-bold mb-8 gradient-title">
-        Create New Project
-      </h1>
-
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col space-y-4"
-      >
-        <div>
-          <Input
-            id="name"
-            {...register("name")}
-            className="bg-slate-950"
-            placeholder="Project Name"
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-          )}
-        </div>
-
-        <div>
-          <Input
-            id="key"
-            {...register("key")}
-            className="bg-slate-950"
-            placeholder="Project Key (Ex: RCYT)"
-          />
-          {errors.key && (
-            <p className="text-red-500 text-sm mt-1">{errors.key.message}</p>
-          )}
-        </div>
-
-        <div>
-          <Textarea
-            id="description"
-            {...register("description")}
-            className="bg-slate-950 h-28"
-            placeholder="Project Description"
-          />
-          {errors.description && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.description.message}
-            </p>
-          )}
-        </div>
-
-        {loading && <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />}
-
-        <Button
-          type="submit"
-          size="lg"
-          disabled={loading}
-          className="bg-blue-500 text-white"
-        >
-          {loading ? "Creating..." : "Create Project"}
-        </Button>
-
-        {error && <p className="text-red-500 mt-2">{error.message}</p>}
-      </form>
-    </div>
-  );
+  return <CreateProjectClient orgId={orgId} />;
 }

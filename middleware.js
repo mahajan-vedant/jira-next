@@ -26,14 +26,14 @@ export default clerkMiddleware((auth, req) => {
   }
 
   // Redirect to onboarding if user is logged in but has no org selected
-  if (
-    userId &&
-    !orgId &&
-    !req.nextUrl.pathname.startsWith("/onboarding") &&
-    !req.nextUrl.pathname.startsWith("/organization")
-  ) {
-    return NextResponse.redirect(new URL("/onboarding", req.url));
-  }
+  // if (
+  //   userId &&
+  //   !orgId &&
+  //   !req.nextUrl.pathname.startsWith("/onboarding") &&
+  //   !req.nextUrl.pathname.startsWith("/organization")
+  // ) {
+  //   return NextResponse.redirect(new URL("/onboarding", req.url));
+  // }
 });
 
 // Match all non-static, non-internal, and API routes

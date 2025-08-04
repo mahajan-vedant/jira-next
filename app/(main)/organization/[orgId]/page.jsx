@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import { getOrganization } from "@/actions/organizations";
 import OrgSwitcher from "@/components/org-switcher";
 import ProjectList from "./_components/project-list";
-//import UserIssues from "./_components/user-issues";
+import { getOrgList } from "@/components/getOrgList";
+//import OrgClientComponent from "@/components/org-client";
+import UserIssues from "./_components/user_issues";
 
 export default async function OrganizationPage({ params }) {
   const { orgId } = await params;
@@ -14,6 +16,9 @@ export default async function OrganizationPage({ params }) {
   }
 
   const organization = await getOrganization(orgId);
+   const organizations = await getOrgList(userId);  
+
+   console.log("Organizations:", organizations);
 
   if (!organization) {
     return <div>Organization not found</div>;
@@ -31,8 +36,13 @@ export default async function OrganizationPage({ params }) {
       <div className="mb-4">
         <ProjectList orgId={organization.id} />
       </div>
+   {/* <div className="mt-8">
+        <OrgClientComponent organizations={organizations} />
+      </div> */}
+    
+      
       <div className="mt-8">
-        {/* <UserIssues userId={userId} /> */}
+        <UserIssues userId={userId} />
       </div>
     </div>
   );
