@@ -167,7 +167,7 @@ export default function IssueDetailsDialog({
               disabled={deleteLoading}
               variant="destructive"
             >
-              {deleteLoading ? "Deleting..." : "Delete Issue"}
+              {deleteLoading ? "Deleting..." : "Delete Task"}
             </Button>
           )}
           {(deleteError || updateError) && (

@@ -15,10 +15,10 @@ import UserAvatar from "./user-avatar";
 import { useRouter } from "next/navigation";
 
 const priorityColor = {
-  LOW: "border-green-600",
-  MEDIUM: "border-yellow-300",
-  HIGH: "border-orange-400",
-  URGENT: "border-red-400",
+  LOW: "border-t-green-600",
+  MEDIUM: "border-t-yellow-300",
+  HIGH: "border-t-orange-400",
+  URGENT: "border-t-red-400",
 };
 
 export default function IssueCard({
@@ -47,11 +47,11 @@ export default function IssueCard({
   return (
     <>
       <Card
-        className="cursor-pointer hover:shadow-md transition-shadow"
+        className={`cursor-pointer hover:shadow-md transition-shadow border border-white border-t-[4px] ${priorityColor[issue.priority]} rounded-lg`}
         onClick={() => setIsDialogOpen(true)}
       >
         <CardHeader
-          className={`border-t-2 ${priorityColor[issue.priority]} rounded-lg`}
+          className={``}
         >
           <CardTitle>{issue.title}</CardTitle>
         </CardHeader>

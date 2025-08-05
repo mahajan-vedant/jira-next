@@ -89,7 +89,7 @@ export default function IssueCreationDrawer({
     <Drawer open={isOpen} onClose={onClose}>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Create New Issue</DrawerTitle>
+          <DrawerTitle>Create New Task</DrawerTitle>
         </DrawerHeader>
         {usersLoading && <BarLoader width={"100%"} color="#36d7b7" />}
         <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-4">
@@ -191,7 +191,7 @@ export default function IssueCreationDrawer({
             disabled={createIssueLoading}
             className="w-full"
           >
-            {createIssueLoading ? "Creating..." : "Create Issue"}
+            {createIssueLoading ? "Creating..." : "Create Task"}
           </Button>
         </form>
       </DrawerContent>

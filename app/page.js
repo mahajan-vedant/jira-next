@@ -5,6 +5,9 @@ import {
   Layout,
   Calendar,
   BarChart,
+  Trello,
+  Target,
+  LineChart,
   ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,25 +23,24 @@ import Image from "next/image";
 import Contact from "@/components/contact";
 
 
-
 const features = [
   {
-    title: "Intuitive Kanban Boards",
+    title: "Smart Kanban Workflow",
     description:
-      "Visualize your workflow and optimize team productivity with our easy-to-use Kanban boards.",
-    icon: Layout,
+      "Stay organized with dynamic Kanban boards that adapt to your team's evolving needs and streamline task tracking.",
+    icon: Trello, // was Layout
   },
   {
-    title: "Powerful Sprint Planning",
+    title: "Agile Sprint Management",
     description:
-      "Plan and manage sprints effectively, ensuring your team stays focused on delivering value.",
-    icon: Calendar,
+      "Plan, prioritize, and execute sprints with clarity. Keep your team aligned and focused on what truly matters.",
+    icon: Target, // was Calendar
   },
   {
-    title: "Comprehensive Reporting",
+    title: "Real-Time Performance Insights",
     description:
-      "Gain insights into your team's performance with detailed, customizable reports and analytics.",
-    icon: BarChart,
+      "Track progress, identify bottlenecks, and make informed decisions with live analytics and customizable dashboards.",
+    icon: LineChart, // was BarChart
   },
 ];
 
@@ -48,9 +50,9 @@ export default function Home() {
       {/* Hero Section */}
       <section className="container mx-auto py-20 text-center">
         <h1 className="text-6xl sm:text-7xl lg:text-8xl font-extrabold gradient-title pb-6 flex flex-col">
-          Streamline Your Workflow <br />
+          Less Chaos, More Clarity <br />
           <span className="flex mx-auto gap-3 sm:gap-4 items-center">
-            with xyz
+            -with xyz
             {/* <Image
               src={"/logo2.png"}
               alt="Zscrum Logo"

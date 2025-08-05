@@ -111,7 +111,7 @@ export async function deleteIssue(issueId) {
     issue.reporterId !== user.id &&
     !issue.project.adminIds.includes(user.id)
   ) {
-    throw new Error("You don't have permission to delete this issue");
+    throw new Error("You don't have permission to delete this Task");
   }
 
   await db.issue.delete({ where: { id: issueId } });
